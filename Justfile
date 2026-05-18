@@ -1,4 +1,6 @@
 set dotenv-load
+set shell := ["sh", "-cu"]
+set windows-shell := ["powershell.exe", "-NoLogo", "-ExecutionPolicy", "Bypass", "-Command"]
 
 default:
     just --list
@@ -27,10 +29,7 @@ front:
     uv run streamlit run front/app.py
 
 mlflow:
-    uvx mlflow server \
-        --backend-store-uri $DATABASE_URL \
-        --default-artifact-root ./models \
-        --host 127.0.0.1 --port 5000
+    uvx --with psycopg2-binary mlflow server --backend-store-uri $DATABASE_URL --default-artifact-root ./models --host 127.0.0.1 --port 5000 --dev
 
 dev:
     just api & just front

@@ -15,3 +15,8 @@ models/
 
 # Environment variables
 .env
+
+mlflow.db
+models/
+
+data/*
