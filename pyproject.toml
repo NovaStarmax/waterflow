@@ -1,0 +1,39 @@
+[project]
+name = "waterflow"
+version = "0.1.0"
+description = "Prédiction de potabilité de l'eau — MLOps avec MLflow"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = []
+
+[project.optional-dependencies]
+api = [
+    "fastapi",
+    "uvicorn",
+    "mlflow",
+    "scikit-learn",
+    "numpy",
+    "pandas",
+]
+front = [
+    "streamlit",
+    "requests",
+    "plotly",
+    "pandas",
+]
+notebooks = [
+    "ipykernel",
+    "scikit-learn",
+    "xgboost",
+    "torch",
+    "matplotlib",
+    "seaborn",
+    "numpy",
+    "pandas",
+    "mlflow",
+]
+dev = [
+    "pytest",
+    "httpx",
+    "ruff",
+]
