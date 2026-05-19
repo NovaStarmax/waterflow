@@ -25,7 +25,6 @@ notebooks = [
     "ipykernel",
     "scikit-learn",
     "xgboost",
-    "torch",
     "matplotlib",
     "seaborn",
     "numpy",
