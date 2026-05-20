@@ -12,6 +12,7 @@ api = [
     "uvicorn",
     "mlflow",
     "scikit-learn",
+    "xgboost",
     "numpy",
     "pandas",
 ]
