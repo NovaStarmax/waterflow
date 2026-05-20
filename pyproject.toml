@@ -30,7 +30,8 @@ notebooks = [
     "numpy",
     "pandas",
     "mlflow",
-    "seaborn"
+    "seaborn",
+    "optuna"
 ]
 dev = [
     "pytest",

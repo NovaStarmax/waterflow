@@ -5,7 +5,7 @@ from sklearn.pipeline import Pipeline
 from sklearn.impute import SimpleImputer
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.dummy import DummyClassifier
-from sklearn.metrics import accuracy_score, f1_score, roc_auc_score
+from sklearn.metrics import accuracy_score, f1_score, roc_auc_score, recall_score, precision_score
 from xgboost import XGBClassifier
 import mlflow
 import mlflow.sklearn
@@ -56,6 +56,8 @@ with mlflow.start_run(run_name="RandomForest_baseline"):
 
     # Métriques
     accuracy = accuracy_score(y_test, y_pred)
+    recall = recall_score(y_test, y_pred)
+    precision = precision_score(y_test, y_pred)
     f1 = f1_score(y_test, y_pred, average="binary")
     auc = roc_auc_score(y_test, y_proba)
 
@@ -66,6 +68,8 @@ with mlflow.start_run(run_name="RandomForest_baseline"):
 
     # Log des métriques
     mlflow.log_metric("accuracy", accuracy)
+    mlflow.log_metric("recall", recall)
+    mlflow.log_metric("precision", precision)
     mlflow.log_metric("f1_score", f1)
     mlflow.log_metric("roc_auc", auc)
 
@@ -86,6 +90,8 @@ with mlflow.start_run(run_name="Dummy_baseline"):
 
     # Métriques
     accuracy_dummy = accuracy_score(y_test, y_pred_dummy)
+    recall_dummy = recall_score(y_test, y_pred_dummy)
+    precision_dummy = precision_score(y_test, y_pred_dummy)
     f1_dummy = f1_score(y_test, y_pred_dummy, average="binary")
     auc_dummy = roc_auc_score(y_test, y_proba_dummy)
 
@@ -94,6 +100,8 @@ with mlflow.start_run(run_name="Dummy_baseline"):
 
     # Log des métriques
     mlflow.log_metric("accuracy", accuracy_dummy)
+    mlflow.log_metric("recall", recall_dummy)
+    mlflow.log_metric("precision", precision_dummy)
     mlflow.log_metric("f1_score", f1_dummy)
     mlflow.log_metric("roc_auc", auc_dummy)
 
@@ -126,6 +134,8 @@ with mlflow.start_run(run_name="XGBoost_baseline"):
 
     # Métriques
     accuracy_xgb = accuracy_score(y_test, y_pred_xgb)
+    recall_xgb = recall_score(y_test, y_pred_xgb)
+    precision_xgb = precision_score(y_test, y_pred_xgb)
     f1_xgb = f1_score(y_test, y_pred_xgb, average="binary")
     auc_xgb = roc_auc_score(y_test, y_proba_xgb)
 
@@ -136,6 +146,8 @@ with mlflow.start_run(run_name="XGBoost_baseline"):
 
     # Log des métriques
     mlflow.log_metric("accuracy", accuracy_xgb)
+    mlflow.log_metric("recall", recall_xgb)
+    mlflow.log_metric("precision", precision_xgb)
     mlflow.log_metric("f1_score", f1_xgb)
     mlflow.log_metric("roc_auc", auc_xgb)
 
@@ -143,8 +155,8 @@ with mlflow.start_run(run_name="XGBoost_baseline"):
     mlflow.sklearn.log_model(xgb_pipeline, artifact_path="model")
 
 # ── Récapitulatif terminal ────────────────────────────────────────────────────
-print(f"\n{'Modèle':<10} | {'Accuracy':<8} | {'F1':<8} | {'AUC-ROC':<8}")
-print("-" * 46)
-print(f"{'Dummy':<10} | {accuracy_dummy:<8.4f} | {f1_dummy:<8.4f} | {auc_dummy:<8.4f}")
-print(f"{'RF':<10} | {accuracy:<8.4f} | {f1:<8.4f} | {auc:<8.4f}")
-print(f"{'XGBoost':<10} | {accuracy_xgb:<8.4f} | {f1_xgb:<8.4f} | {auc_xgb:<8.4f}")
+print(f"\n{'Modèle':<10} | {'Accuracy':<8} | {'Recall':<8} | {'Precision':<10} | {'F1':<8} | {'AUC-ROC':<8}")
+print("-" * 70)
+print(f"{'Dummy':<10} | {accuracy_dummy:<8.4f} | {recall_dummy:<8.4f} | {precision_dummy:<10.4f} | {f1_dummy:<8.4f} | {auc_dummy:<8.4f}")
+print(f"{'RF':<10} | {accuracy:<8.4f} | {recall:<8.4f} | {precision:<10.4f} | {f1:<8.4f} | {auc:<8.4f}")
+print(f"{'XGBoost':<10} | {accuracy_xgb:<8.4f} | {recall_xgb:<8.4f} | {precision_xgb:<10.4f} | {f1_xgb:<8.4f} | {auc_xgb:<8.4f}")

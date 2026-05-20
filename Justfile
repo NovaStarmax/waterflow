@@ -37,6 +37,9 @@ dev:
 experiment:
     uv run python scripts/experiment.py
 
+tune:
+    uv run python scripts/tune.py
+
 # Qualité
 lint:
     uv run ruff check .
