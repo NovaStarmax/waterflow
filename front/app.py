@@ -1,13 +1,3 @@
-"""
-WaterFlow 💧 — Streamlit UI for water potability prediction
-Run: streamlit run app.py
-
-Stack: Streamlit only (no Plotly / Altair external).
-- Custom CSS injected via st.markdown for the aquatic / data-dashboard look
-- Built-in st.area_chart / st.bar_chart for the world-stats visuals
-- Layout: sidebar + main with two sections (world stats + predictor)
-"""
-from __future__ import annotations
 import datetime as dt
 import pandas as pd
 import streamlit as st
@@ -353,11 +343,15 @@ with st.sidebar:
     for name, vals in PRESETS.items():
         if st.button(name, key=f"preset_{name}", use_container_width=True):
             st.session_state.inputs = dict(vals)
+            for k, v in vals.items():
+                st.session_state[f"slider_{k}"] = float(v)
             st.rerun()
 
     st.markdown("<div style='font-size:10px;text-transform:uppercase;letter-spacing:0.12em;font-weight:700;opacity:0.6;font-family:monospace;margin-top:10px;'>// Outils</div>", unsafe_allow_html=True)
     if st.button("↻  Réinitialiser", key="reset", use_container_width=True):
         st.session_state.inputs = {k: m["default"] for k, m in META.items()}
+        for k, m in META.items():
+            st.session_state[f"slider_{k}"] = float(m["default"])
         st.rerun()
 
     st.markdown(
@@ -584,9 +578,9 @@ with in_col:
 # Run prediction
 if predict_clicked:
     payload = WaterInput(**st.session_state.inputs)
-    result, source = predict(payload)
+    result = predict(payload)
     st.session_state.result = result
-    st.session_state.source = source
+    st.session_state.source = "local"
     st.session_state.history.append({
         "ts": dt.datetime.now().strftime("%H:%M"),
         "ph": st.session_state.inputs["ph"],

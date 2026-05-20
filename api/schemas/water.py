@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 
+
 class WaterInput(BaseModel):
     ph: float
     hardness: float

@@ -20,3 +20,11 @@ mlflow.db
 models/
 
 data/*
+
+# MLflow artifacts & model files
+*.pkl
+*.pickle
+MLmodel
+conda.yaml
+python_env.yaml
+mlruns/
