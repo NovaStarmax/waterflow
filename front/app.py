@@ -302,9 +302,9 @@ GROUPS = {
     "cont": ("⚠", "Contaminants",  "Chloramines · COT · THM"),
 }
 PRESETS = {
-    "💧 Eau potable typique": {"ph": 7.2, "hardness": 150.0, "solids": 350.0, "chloramines": 2.5, "sulfate": 200.0, "conductivity": 420.0, "organic_carbon": 2.5, "trihalomethanes": 40.0, "turbidity": 2.0},
+    "💧 Eau potable typique": {"ph": 6.5, "hardness": 150.0, "solids": 350.0, "chloramines": 2.5, "sulfate": 200.0, "conductivity": 420.0, "organic_carbon": 2.5, "trihalomethanes": 40.0, "turbidity": 2.0},
     "⚠️ Eau contaminée":      {"ph": 5.1, "hardness": 280.0, "solids": 35000.0, "chloramines": 9.5, "sulfate": 410.0, "conductivity": 720.0, "organic_carbon": 18.0, "trihalomethanes": 105.0, "turbidity": 6.4},
-    "⛲ Eau de source":        {"ph": 7.6, "hardness": 90.0, "solids": 180.0, "chloramines": 0.2, "sulfate": 40.0, "conductivity": 280.0, "organic_carbon": 1.1, "trihalomethanes": 5.0, "turbidity": 0.8},
+    "⛲ Eau de source":        {"ph": 6.5, "hardness": 90.0, "solids": 180.0, "chloramines": 0.2, "sulfate": 40.0, "conductivity": 280.0, "organic_carbon": 1.1, "trihalomethanes": 5.0, "turbidity": 0.8},
 }
 
 # =============================================================================
