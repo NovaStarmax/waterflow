@@ -41,9 +41,6 @@ X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.2, stratify=y, random_state=42
 )
 
-# Poids fixe pour compenser le déséquilibre de classes
-scale_pos_weight = (y_train == 0).sum() / (y_train == 1).sum()
-
 # ── Fonction objectif Optuna ──────────────────────────────────────────────────
 def objective(trial: optuna.Trial) -> float:
     params = {
@@ -53,13 +50,16 @@ def objective(trial: optuna.Trial) -> float:
         "min_child_weight": trial.suggest_int("min_child_weight", 1, 10),
         "subsample": trial.suggest_float("subsample", 0.6, 1.0),
         "colsample_bytree": trial.suggest_float("colsample_bytree", 0.6, 1.0),
+        "scale_pos_weight": trial.suggest_float("scale_pos_weight", 0.5, 3.0),
+        "gamma": trial.suggest_float("gamma", 0.0, 5.0),
+        "reg_alpha": trial.suggest_float("reg_alpha", 1e-3, 2.0, log=True),
+        "reg_lambda": trial.suggest_float("reg_lambda", 0.5, 5.0),
     }
 
     pipeline = Pipeline([
         ("imputer", SimpleImputer(strategy="median")),
         ("classifier", XGBClassifier(
             **params,
-            scale_pos_weight=scale_pos_weight,
             random_state=42,
             eval_metric="logloss",
             verbosity=0,
@@ -81,7 +81,6 @@ def objective(trial: optuna.Trial) -> float:
         # Log des hyperparamètres
         for key, value in params.items():
             mlflow.log_param(key, value)
-        mlflow.log_param("scale_pos_weight", round(float(scale_pos_weight), 4))
 
         # Log des métriques
         mlflow.log_metric("precision", precision)
@@ -90,15 +89,15 @@ def objective(trial: optuna.Trial) -> float:
         mlflow.log_metric("roc_auc", auc)
         mlflow.log_metric("accuracy", accuracy)
 
-    # Contrainte F1 minimum : pénalise les modèles en dessous du seuil
+    # Pénalité douce : signal graduel vers la contrainte F1 >= 0.40
     if f1 < 0.40:
-        return 0.0
+        return precision * (f1 / 0.40)
     return precision
 
 
-# ── Optimisation — 50 trials ──────────────────────────────────────────────────
+# ── Optimisation — 100 trials ─────────────────────────────────────────────────
 study = optuna.create_study(direction="maximize")
-study.optimize(objective, n_trials=50)
+study.optimize(objective, n_trials=100)
 
 # ── Récupération du meilleur trial valide ─────────────────────────────────────
 # On filtre les trials avec f1 >= 0.40 (valeur retournée > 0.0)
@@ -116,7 +115,6 @@ best_pipeline = Pipeline([
     ("imputer", SimpleImputer(strategy="median")),
     ("classifier", XGBClassifier(
         **best_params,
-        scale_pos_weight=scale_pos_weight,
         random_state=42,
         eval_metric="logloss",
         verbosity=0,
@@ -158,7 +156,6 @@ with mlflow.start_run(run_name="XGB_tuned_best"):
     # Meilleurs hyperparamètres
     for key, value in best_params.items():
         mlflow.log_param(key, value)
-    mlflow.log_param("scale_pos_weight", round(float(scale_pos_weight), 4))
     mlflow.log_param("threshold", best_threshold)
 
     # Métriques au seuil optimal
@@ -188,7 +185,6 @@ for t in sorted_trials:
         ("imputer", SimpleImputer(strategy="median")),
         ("classifier", XGBClassifier(
             **t.params,
-            scale_pos_weight=scale_pos_weight,
             random_state=42,
             eval_metric="logloss",
             verbosity=0,
