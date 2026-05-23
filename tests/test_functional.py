@@ -1,7 +1,11 @@
+import pytest
+from pathlib import Path
 from fastapi.testclient import TestClient
 from api.main import app
 
 client = TestClient(app)
+
+MODEL_EXISTS = Path("models/model.pkl").exists()
 
 
 def test_health_retourne_200():
@@ -9,6 +13,7 @@ def test_health_retourne_200():
     assert response.status_code == 200
 
 
+@pytest.mark.skipif(not MODEL_EXISTS, reason="modèle absent")
 def test_predict_retourne_200():
     response = client.post("/api/predict", json={
         "ph": 7.0,
