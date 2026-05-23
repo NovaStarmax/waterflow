@@ -16,10 +16,15 @@ FEATURE_COLUMNS = [
     "Conductivity", "Organic_carbon", "Trihalomethanes", "Turbidity",
 ]
 
-_model = joblib.load(MODEL_PATH)
+_model = None
 
 
 def predict(payload: WaterInput) -> PredictionOutput:
+    global _model
+    if _model is None:
+        if not MODEL_PATH.exists():
+            raise FileNotFoundError(f"Modèle introuvable : {MODEL_PATH}")
+        _model = joblib.load(MODEL_PATH)
     x = pd.DataFrame([[
         payload.ph, payload.hardness, payload.solids, payload.chloramines,
         payload.sulfate, payload.conductivity, payload.organic_carbon,
