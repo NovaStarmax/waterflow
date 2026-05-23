@@ -21,6 +21,9 @@ front = [
     "requests",
     "plotly",
     "pandas",
+    "joblib",
+    "scikit-learn",
+    "numpy",
 ]
 notebooks = [
     "ipykernel",
