@@ -23,6 +23,7 @@ front = [
     "pandas",
     "joblib",
     "scikit-learn",
+    "xgboost",
     "numpy",
     "pydantic",
 ]
