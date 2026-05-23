@@ -24,6 +24,7 @@ front = [
     "joblib",
     "scikit-learn",
     "numpy",
+    "pydantic",
 ]
 notebooks = [
     "ipykernel",
