@@ -1,0 +1,25 @@
+name: CI
+
+on:
+  push:
+    branches: [app, vps, master]
+  pull_request:
+    branches: [vps, master]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Récupère le code
+        uses: actions/checkout@v4
+
+      - name: Installe Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Installe les dépendances
+        run: pip install -e ".[api,front,dev]"
+
+      - name: Lance les tests
+        run: pytest tests/
