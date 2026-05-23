@@ -44,3 +44,7 @@ dev = [
     "httpx",
     "ruff",
 ]
+
+[tool.setuptools.packages.find]
+include = ["api*", "front*"]
+exclude = ["veille*", "notebooks*", "tests*"]
