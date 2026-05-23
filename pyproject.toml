@@ -45,6 +45,9 @@ dev = [
     "ruff",
 ]
 
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
 [tool.setuptools.packages.find]
 include = ["api*", "front*"]
 exclude = ["veille*", "notebooks*", "tests*"]
